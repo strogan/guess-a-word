@@ -45,11 +45,7 @@ io.on('connection', (socket) => {
 
   socket.on('confirmGame', (data) => {
     const { player, word } = decodeMessage(data); 
-    console.log("confirm game", player, word)
-    const socketId = Object.keys(users).find(id => users[id] === player);
-    if (socketId) {
-      io.to(socketId).emit('gameRequest', encodeMessage({ from: users[socket.id], word }));
-    }
+    io.to(player).emit('gameRequest', encodeMessage({ from: users[socket.id], word }));
   });
 
   socket.on('gameResponse', (data) => {
