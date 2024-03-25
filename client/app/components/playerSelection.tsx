@@ -5,7 +5,7 @@ interface PlayerSelectionProps {
     onSelectPlayer: (user: string) => void;
 }
 
-export default function PlayerSelection({ users, login, myUserId, onSelectPlayer }: PlayerSelectionProps) {
+export default function PlayerSelection({ users, myUserId, onSelectPlayer }: PlayerSelectionProps) {
 
     const usersList = Object.keys(users);
 

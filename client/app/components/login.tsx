@@ -22,9 +22,7 @@ export default function LoginForm({setLoggedIn}:LoginFormProps) {
 
   useEffect(() => {
     socket.on('userId', (data) => {
-      console.log("wtf", data)
       const {id} = decodeMessage(data)
-      console.log("wtf222", id)
       setLoggedIn([login, id])
     });
 

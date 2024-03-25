@@ -1,7 +1,6 @@
 import { decodeMessage , encodeMessage} from "../utils/binaryProtocolUtils"
 import { SyntheticEvent, useEffect, useState } from "react"
 import socket from "../utils/socket"
-import { useRouter } from "next/navigation"
 
 interface GameProps {
   gameId:any,
@@ -11,7 +10,6 @@ interface GameProps {
 }
  
 export default function Game({gameId, player, word, onGameOver}:GameProps) {
-  const router = useRouter()
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<{message: string, author: string, host: boolean}[]>([])
 
