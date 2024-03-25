@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
       io.to(player2).emit('gameOver', encodeMessage({winner: users[player2]}));
       delete gameRooms[gameId];
     }
-    const msg = encodeMessage({message, player1: users[player1], author})
+    const msg = encodeMessage({message, player1, author, authorName: users[author]})
     
 
     io.to(player1).emit('gameMessage', msg);

@@ -4,26 +4,27 @@ import socket from "../utils/socket"
 
 interface GameProps {
   gameId:any,
-  onGameOver: () => void
-  player: string, 
+  onGameOver: () => void,
+  player: string,
+  myUserId: string,
   word: string
 }
  
-export default function Game({gameId, player, word, onGameOver}:GameProps) {
+export default function Game({gameId, player, myUserId, word, onGameOver}:GameProps) {
   const [message, setMessage] = useState("")
-  const [messages, setMessages] = useState<{message: string, author: string, host: boolean}[]>([])
+  const [messages, setMessages] = useState<{message: string, authorName: string, host: boolean}[]>([])
 
   const handleSubmit = (e:SyntheticEvent) => {
     e.preventDefault()
-    const data = encodeMessage({gameId, message, author: player })
+    const data = encodeMessage({gameId, message, author: myUserId })
     socket.emit("gameMessage",data)
     setMessage('')
   }
 
   useEffect(()=>{
     socket.on('gameMessage', (data) => {
-        const {message, player1, author} = decodeMessage(data)
-        setMessages(prevMessages => [...prevMessages, { message, author, host: player1===author }]);
+        const {message, player1, author, authorName} = decodeMessage(data)
+        setMessages(prevMessages => [...prevMessages, { message, authorName, host: player1===author }]);
     });
 
     socket.on('gameOver', (data) => {
@@ -53,7 +54,7 @@ export default function Game({gameId, player, word, onGameOver}:GameProps) {
           {messages.map((message,idx)=>(
             <li key={idx} className="mb-2">
               <span className={message.host ? "font-bold text-blue-500" : "font-bold"}>
-                {message.author}:</span> {message.message}
+                {message.authorName}:</span> {message.message}
             </li>
           ))}
         </ul>
