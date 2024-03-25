@@ -11,10 +11,10 @@ export default function WordInput({ onSubmit }: { onSubmit: (word: string) => vo
 
     return (
         <>
-        <h2>Write word for a game</h2>
-         <form id="form" onSubmit={handleSubmit}>
-            <input id="input" value={word} onChange={(e) => setWord(e.target.value)} />
-            <button type='submit'>Send</button>
+        <h1>Write word for a game</h1>
+         <form id="form" onSubmit={handleSubmit} className="flex flex-col gap-2">
+            <input id="input" value={word} onChange={(e) => setWord(e.target.value)} className="border p-2 rounded"/>
+            <button type='submit' className="bg-blue-500 text-white p-2 rounded">Send</button>
         </form>
         </>
        

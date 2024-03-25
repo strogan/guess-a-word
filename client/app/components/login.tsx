@@ -3,7 +3,7 @@ import socket from '../utils/socket';
 import { decodeMessage } from '../utils/binaryProtocolUtils';
 
 interface LoginFormProps {
-    setLoggedIn: (value: [string, string]) => void;
+    setLoggedIn: (value: { username: string; id: string }) => void;
 }
 
 export default function LoginForm({setLoggedIn}:LoginFormProps) {
@@ -23,7 +23,7 @@ export default function LoginForm({setLoggedIn}:LoginFormProps) {
   useEffect(() => {
     socket.on('userId', (data) => {
       const {id} = decodeMessage(data)
-      setLoggedIn([login, id])
+      setLoggedIn({username: login, id})
     });
 
     return () => {

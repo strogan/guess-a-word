@@ -4,9 +4,10 @@ import { useState } from 'react';
 import LoginForm from './components/login';
 import GameCreation from './components/gameCreation';
 
+
 export default function Home() {
 
-  const [loggedIn, setLoggedIn] = useState<[string, string]>(['','']);
+  const [loggedIn, setLoggedIn] = useState<{ username: string; id: string }>({ username: '', id: '' });
 
 
   return (
@@ -14,7 +15,7 @@ export default function Home() {
       
       
       <div>
-          {loggedIn[1] ? <GameCreation login={loggedIn[0]} id={loggedIn[1]} /> : <LoginForm setLoggedIn={setLoggedIn}/>}
+          {loggedIn.id ? <GameCreation login={loggedIn.username} id={loggedIn.id} /> : <LoginForm setLoggedIn={setLoggedIn}/>}
 
     </div>
 
