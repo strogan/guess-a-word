@@ -29,6 +29,14 @@ io.on('connection', (socket) => {
     io.emit('users',  encodeMessage({users}) );
   });
 
+  socket.on('getGames', () => {
+    io.emit('games',  encodeMessage({gameRooms}) );
+  });
+
+  socket.on('joinGameRoom', (roomId) => {
+    socket.join(roomId);
+  });
+
   socket.on('disconnect', () => {
     delete users[socket.id]; 
     io.emit('users', encodeMessage({users}) );
@@ -54,6 +62,11 @@ io.on('connection', (socket) => {
     if (accept) {
       const roomId = `${socketPlayerOneId}-${socket.id}`;
       gameRooms[roomId] = { player1: socketPlayerOneId, player2: socket.id , word };
+      
+      const socketPlayerOne = io.sockets.sockets.get(socketPlayerOneId);
+      socketPlayerOne.join(roomId);
+      socket.join(roomId);
+
       io.to(socketPlayerOneId).to(socket.id).emit('startGame', encodeMessage({ roomId, player1: users[socketPlayerOneId], player2: users[socket.id]}));
     } else {
       io.to(socketPlayerOneId).emit('gameDeclined');
@@ -68,15 +81,12 @@ io.on('connection', (socket) => {
     const {player1, player2, word} = gameRooms[gameId]
 
     if(message === word){
-      io.to(player1).emit('gameOver', encodeMessage({winner: users[player2]}));
-      io.to(player2).emit('gameOver', encodeMessage({winner: users[player2]}));
+      io.to(gameId).emit('gameOver', encodeMessage({winner: users[player2]}));
       delete gameRooms[gameId];
     }
     const msg = encodeMessage({message, player1, author, authorName: users[author]})
-    
 
-    io.to(player1).emit('gameMessage', msg);
-    io.to(player2).emit('gameMessage', msg);
+    io.to(gameId).emit('gameMessage', msg);
 
   });
   

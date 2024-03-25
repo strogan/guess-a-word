@@ -8,7 +8,6 @@ import Game from "./game";
 
 
 export default function gameCreation({ login, id }: { login: string, id: string}) {
-    const users  = useGetUsers();
     const [me, setMe] = useState('')
     const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
     const [gameRequestFrom, setGameRequestFrom] = useState('');
@@ -19,6 +18,12 @@ export default function gameCreation({ login, id }: { login: string, id: string}
         setSelectedPlayer(user);
         
     };
+
+    const handleSelectGame = (gameId:string) => {
+        
+        setGameId(gameId)
+        socket.emit('joinGameRoom', gameId);
+    }
 
     const handleWordSubmit = (word: string) => {
 
@@ -76,7 +81,7 @@ export default function gameCreation({ login, id }: { login: string, id: string}
         return selectedPlayer ? (
             <WordInput onSubmit={handleWordSubmit} />
         ) : (
-            <PlayerSelection users={users} login={login} myUserId={id} onSelectPlayer={handleSelectPlayer} />
+            <PlayerSelection login={login} myUserId={id} onSelectPlayer={handleSelectPlayer} onSelectGame={handleSelectGame}/>
         )
     }
     return (

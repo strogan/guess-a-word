@@ -16,9 +16,12 @@ export default function Game({gameId, player, myUserId, word, onGameOver}:GamePr
 
   const handleSubmit = (e:SyntheticEvent) => {
     e.preventDefault()
-    const data = encodeMessage({gameId, message, author: myUserId })
-    socket.emit("gameMessage",data)
-    setMessage('')
+    if(player){
+      const data = encodeMessage({gameId, message, author: myUserId })
+      socket.emit("gameMessage",data)
+      setMessage('')
+    }
+    
   }
 
   useEffect(()=>{
@@ -42,12 +45,12 @@ export default function Game({gameId, player, myUserId, word, onGameOver}:GamePr
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-4">Welcome to Guess a word game, {player}</h1>
+      <h1 className="text-2xl font-bold mb-4">Welcome to Guess a word game, {player ? player : "spectator"}</h1>
       <h2>{word ? `Selected word:${word}, can write hint in chat` : "Write your guess"}</h2>
       <div className="flex flex-col gap-4">
         <form id="form" onSubmit={handleSubmit} className="flex flex-col gap-2">
-          <input id="input" value={message} onChange={(e)=>setMessage(e.target.value)} className="border p-2 rounded"/>
-          <button type='submit' className="bg-blue-500 text-white p-2 rounded">Send</button>
+          <input id="input" value={message} onChange={(e)=>setMessage(e.target.value)} disabled={!player} className="border p-2 rounded"/>
+          <button type='submit' disabled={!player} className={`${player ? 'bg-blue-500' : ''} text-white p-2 rounded`}>Send</button>
         </form>
 
         <ul className="border p-4 rounded overflow-auto h-64">
